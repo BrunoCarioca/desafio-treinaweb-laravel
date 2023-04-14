@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('nome');
             $table->string('endereco');
             $table->string('contato');
-            $table->string('descricao');
-            $table->text('imagem_local');
+            $table->string('descricao')->nullable();
+            $table->text('imagem_local')->nullable();
 
             $table->foreignId('user_id')
                   ->constrained()

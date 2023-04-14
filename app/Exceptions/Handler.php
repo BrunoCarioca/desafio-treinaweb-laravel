@@ -2,11 +2,13 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
+    use ApiHandler;
+
     /**
      * A list of exception types with their corresponding custom log levels.
      *
@@ -43,10 +45,24 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        dd($this);
-
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    /**
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Throwable  $e
+     */
+    public function render($request, Throwable $e)
+    {
+
+        if ($request->is('api/*')) {
+            return $this->getJsonExceptions($e);
+        }
+
+        return parent::render($request, $e);
     }
 }

@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'nome',
         'email',
         'password',
     ];
@@ -41,4 +41,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    /**
+     * Verefy if email exists
+     *
+     * @param string $email
+     * @return User|null
+     */
+    static protected function verifyEmail($email): User|null
+    {
+        return User::where("email", $email)->first();
+    }
 }

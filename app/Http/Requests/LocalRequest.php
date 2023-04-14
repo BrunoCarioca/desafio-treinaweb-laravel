@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\LocalCreateUniqueEmail;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LocalRequest extends FormRequest
@@ -29,7 +30,7 @@ class LocalRequest extends FormRequest
             "contato" => ["required", "string", "max:255", "min:3"],
             "descricao" => ["max:255"],
             "usuario.nome" => ["required", "string", "max:255", "min:3"],
-            "usuario.email" => ["required", "string", "email", "max:255", "min:3" ,"unique:users"],
+            "usuario.email" => ["required", "string", "email", "max:255", "min:3" , new LocalCreateUniqueEmail],
             "usuario.password" => ["required", "string", "confirmed"],
             "usuario.password_confirmation" => ["required", "string"],
         ];
