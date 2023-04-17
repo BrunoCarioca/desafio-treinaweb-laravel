@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\LocaisController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LocaisController;
+use App\Http\Controllers\UpdateImageLocalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,21 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('/locais', [LocaisController::class, 'store'])->name('locais.store');
+Route::get('/locais', [LocaisController::class, 'index'])
+    ->middleware(['auth:api'])
+    ->name('locais.index');
+Route::post('/locais/imagem', UpdateImageLocalController::class)
+    ->middleware(['auth:api'])
+    ->name('locais.img');
+
+
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'auth'
+
+], function () {
+    Route::post('login', [AuthController::class, 'login'])->name('auth.login');
+    Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
+    Route::post('refresh', [AuthController::class, 'refresh'])->name('auth.refresh');
+});

@@ -46,8 +46,8 @@ if(!function_exists('token_response')) {
         return response()->json([
             "access" => $token,
             "refresh" => $token,
-            "token_type" => "bearer",
-            "expires_in" => Auth::factory()->getTTL() * 60
+            // "token_type" => "bearer",
+            // "expires_in" => Auth::factory()->getTTL() * 60
         ]);
     }
 }

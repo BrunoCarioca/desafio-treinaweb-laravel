@@ -3,28 +3,72 @@
 namespace App\Exceptions;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Auth\AuthenticationException;
+use  \Illuminate\Validation\ValidationException;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 
 trait ApiHandler
 {
     public function getJsonExceptions (\Throwable $e): JsonResponse
     {
 
-        if($e instanceof ValidationException ) {
-            return $this->getJsonValidationException($e);
+        if($e instanceof ValidationException) {
+            return $this->validationException($e);
         }
 
-        dd($e);
+        if($e instanceof AuthenticationException){
+            return $this->authenticationException($e);
+        }
+
+        if($e instanceof TokenBlacklistedException){
+            return $this->authenticationException($e);
+        }
+
+        if($e instanceof AuthorizationException){
+            return $this->authorizationException($e);
+        }
+
+        if($e instanceof ModelNotFoundException){
+            return $this->modelNotFoundException($e);
+        }
+
+        if($e instanceof HttpException){
+            return $this->httpException($e);
+        }
+
+        return $this->genericException($e);
     }
 
 
-    private function getJsonValidationException(ValidationException $e): JsonResponse
+    protected function authenticationException(
+        AuthenticationException|TokenBlacklistedException $e
+    ): JsonResponse
     {
-        return default_response(
-            "Erro de validação dos dados enviados",
-            "validation_error",
-            400,
-            $e->errors()
-        );
+        return default_response($e->getMessage(), 'token_not_valid', 401);
     }
+
+    protected function genericException(\Throwable $e): JsonResponse
+    {
+        return default_response('Erro interno no servidor', 'internal_server_error', 500);
+    }
+
+    protected function authorizationException(AuthorizationException $e): JsonResponse
+    {
+        return default_response($e->getMessage(), 'authorization_error', 403);
+    }
+
+    protected function modelNotFoundException(ModelNotFoundException $e): JsonResponse
+    {
+        return default_response($e->getMessage(), 'model_not_found', 404);
+    }
+
+    protected function httpException(HttpException $e): JsonResponse
+    {
+        return default_response($e->getMessage(), 'http_exception', $e->getStatusCode());
+    }
+
+
 }
