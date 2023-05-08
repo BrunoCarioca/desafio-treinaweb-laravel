@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LocaisController;
+use App\Http\Controllers\ObjetoController;
+use App\Http\Controllers\ObjetoImageController;
 use App\Http\Controllers\UpdateImageLocalController;
 
 /*
@@ -29,6 +31,14 @@ Route::post('/locais/imagem', UpdateImageLocalController::class)
     ->middleware(['auth:api'])
     ->name('locais.img');
 
+Route::middleware(['auth:api'])->group(function() {
+    Route::get('objetos', [ObjetoController::class, 'index'])->name('objetos.index');
+    Route::post('objetos', [ObjetoController::class, 'store'])->name('objetos.store');
+    Route::post('objetos/{objeto}/imagem', ObjetoImageController::class)->name('objetos.img');
+    Route::get('objetos/{objeto}', [ObjetoController::class, 'show'])->name('objetos.show');
+    Route::put('objetos/{objeto}', [ObjetoController::class, 'update'])->name('objetos.update');
+    Route::delete('objetos/{objeto}', [ObjetoController::class, 'destroy'])->name('objetos.destroy');
+});
 
 Route::group([
 

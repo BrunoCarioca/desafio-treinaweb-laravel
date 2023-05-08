@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Auth\AuthenticationException;
-use  \Illuminate\Validation\ValidationException;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -32,7 +32,7 @@ trait ApiHandler
         }
 
         if($e instanceof ModelNotFoundException){
-            return $this->modelNotFoundException($e);
+            return $this->modelNotFoundException();
         }
 
         if($e instanceof HttpException){
@@ -60,9 +60,9 @@ trait ApiHandler
         return default_response($e->getMessage(), 'authorization_error', 403);
     }
 
-    protected function modelNotFoundException(ModelNotFoundException $e): JsonResponse
+    protected function modelNotFoundException(): JsonResponse
     {
-        return default_response($e->getMessage(), 'model_not_found', 404);
+        return default_response('Objeto não encontrado', 'model_not_found', 404);
     }
 
     protected function httpException(HttpException $e): JsonResponse
@@ -70,5 +70,9 @@ trait ApiHandler
         return default_response($e->getMessage(), 'http_exception', $e->getStatusCode());
     }
 
+    protected function validationException (ValidationException $e): JsonResponse
+    {
+        return default_response($e->getMessage(), 'validation_error', 422, $e->errors());
+    }
 
 }
