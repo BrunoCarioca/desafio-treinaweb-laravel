@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -40,6 +41,17 @@ class Local extends Model
     public function adminDoLocal(): HasOne
     {
         return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    /**
+     *  Find local by name
+     *
+     * @param string $nome
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    static public function findLocalByName(string $nome): Collection
+    {
+        return Local::where('nome', 'like', "%{$nome}%")->get();
     }
 
 }

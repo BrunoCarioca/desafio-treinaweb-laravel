@@ -14,12 +14,12 @@ class LocalHateoas extends HateoasBase implements HateoasInterface
         // $this->addLink('GET', 'list', 'local.index');
         // $this->addLink('POST', 'create', 'local.store');
 
-        $this->addLink('GET', 'self', '/api/locais');
-        $this->addLink('PUT', 'atualizar_local', '/api/locais');
-        $this->addLink('DELETE', 'deletar_local', '/api/locais');
-        $this->addLink('POST', 'definir_imagem_local', '/api/locais/imagem');
-        $this->addLink('GET', 'listar_objetos_local', '/api/objetos');
-        $this->addLink('POST', 'adicionar_objeto_local', '/api/objetos');
+        $this->AddLinkProvisorio('GET', 'self', '/api/locais');
+        $this->AddLinkProvisorio('PUT', 'atualizar_local', '/api/locais');
+        $this->AddLinkProvisorio('DELETE', 'deletar_local', '/api/locais');
+        $this->AddLinkProvisorio('POST', 'definir_imagem_local', '/api/locais/imagem');
+        $this->AddLinkProvisorio('GET', 'listar_objetos_local', '/api/objetos');
+        $this->AddLinkProvisorio('POST', 'adicionar_objeto_local', '/api/objetos');
 
         return $this->links;
     }

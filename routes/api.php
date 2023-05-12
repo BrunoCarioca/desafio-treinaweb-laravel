@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BuscaLocalController;
 use App\Http\Controllers\LocaisController;
 use App\Http\Controllers\ObjetoController;
 use App\Http\Controllers\ObjetoImageController;
@@ -30,6 +31,9 @@ Route::get('/locais', [LocaisController::class, 'index'])
 Route::post('/locais/imagem', UpdateImageLocalController::class)
     ->middleware(['auth:api'])
     ->name('locais.img');
+
+Route::get('/locais/busca', [BuscaLocalController::class, 'listLocalByName'])->name('locais.busca');
+Route::get('/locais/{local}/objetos', [BuscaLocalController::class, 'showLocalObjects'])->name('locais.busca.id');
 
 Route::middleware(['auth:api'])->group(function() {
     Route::get('objetos', [ObjetoController::class, 'index'])->name('objetos.index');
